@@ -5,6 +5,7 @@ const connection = mongoose.connect(process.env.CONNECTION_STRING, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
   useCreateIndex: true,
+  useFindAndModify: false,
 });
 
 // console.log(process.env.CONNECTION_STRING);

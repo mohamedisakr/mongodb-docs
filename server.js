@@ -1,13 +1,14 @@
 // /*
 const express = require("express");
 const cors = require("cors");
-const morgan = require("mongoose-morgan");
+// const morgan = require("mongoose-morgan");
+const morgan = require("morgan");
 require("dotenv").config();
 
 const connection = require("./connection");
 const app = express();
-const Inventory = require("./models/inventory");
 
+app.use(morgan("dev"));
 app.use(cors());
 
 // If you are using Express 4.16+ you don't have to import body-parser anymore.
@@ -22,40 +23,20 @@ app.get("/", (req, res) => {
   res.status(200).json("Welcome to home page");
 });
 
-// inventory routes
-app.get("/inventory", async (req, res) => {
-  try {
-    const items = await Inventory.find({}).lean().exec(); //.find({}).lean().exec();
-    res.status(200).json(items);
-  } catch (e) {
-    console.error(e);
-    res.status(500).send();
-  }
-});
-
-app.post("/inventory", async (req, res) => {
-  const newItem = {
-    item: "journal",
-    qty: 25,
-    size: { h: 14, w: 21, uom: "cm" },
-    status: "A",
-  };
-
-  try {
-    const item = await Inventory.create(newItem);
-    res.status(201).json(item.toJSON());
-  } catch (e) {
-    console.error(e);
-    res.status(500).send();
-  }
-});
-
 // Logger
+/*
 app.use(
   morgan({
     connectionString: process.env.CONNECTION_STRING,
   })
 );
+*/
+
+// Routes files
+
+// inventory routes
+const inventoryRouter = require("./routes/inventory");
+app.use("/inventory", inventoryRouter);
 
 connection
   .then(() => {
