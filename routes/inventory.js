@@ -1,8 +1,14 @@
 const router = require("express").Router();
-const { create, findAll, deleteOne } = require("../controllers/inventory");
+const {
+  create,
+  findAll,
+  deleteOne,
+  updateOne,
+  deleteAll,
+} = require("../controllers/inventory");
 
 router.route("/").get(findAll).post(create);
-router.route("/:id").delete(deleteOne);
+router.route("/:id").delete(deleteOne).put(updateOne);
 
 module.exports = router;
 

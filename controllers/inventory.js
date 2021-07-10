@@ -33,9 +33,40 @@ const deleteOne = async (req, res) => {
   }
 };
 
-// const update =
+// (id, update) => {
+// return User.findByIdAndUpdate(id, update, { new: true }).exec()
+
+const updateOne = async (req, res) => {
+  const itemId = req.params.id;
+  const itemToUpdate = req.body;
+  // console.log(`id ${itemId}`);
+  // console.log(`item ${itemToUpdate}`);
+  try {
+    const item = await Inventory.findByIdAndUpdate(itemId, itemToUpdate, {
+      new: true,
+    })
+      .lean()
+      .exec();
+    res.status(200).json(item);
+  } catch (e) {
+    console.error(e);
+    res.status(500).send();
+  }
+};
+
+const deleteAll = async (req, res) => {
+  try {
+    await Inventory.deleteMany({}).lean.exec();
+  } catch (e) {
+    console.error(e);
+    res.status(500).send();
+  }
+};
+
 module.exports = {
   create,
   findAll,
   deleteOne,
+  updateOne,
+  deleteAll,
 };
